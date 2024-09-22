@@ -95,8 +95,9 @@ var app = builder.Build();
 // Configure Middleware Pipeline
 ConfigureMiddleware(app);
 
-app.Urls.Add("http://0.0.0.0:80");  // Add this line
-app.Urls.Add("https://0.0.0.0:443");  // Add this line if you want HTTPS
+app.Urls.Add("http://0.0.0.0:80");
+app.Urls.Add("https://0.0.0.0:443");
+app.Urls.Add("http://0.0.0.0:5000");
 
 app.Run();
 
@@ -123,7 +124,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("*")  // Be cautious with wildcards in production
+            policy.WithOrigins("*")
                 .AllowAnyHeader()
                 .AllowAnyMethod());
     });
