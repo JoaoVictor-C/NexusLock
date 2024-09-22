@@ -36,10 +36,10 @@ const RoomPermission = () => {
     try {
       const hasAccess = employeesWithAccess.some(e => e.employeeId === employeeId);
       if (hasAccess) {
-        await api.delete(`/employeeroomaccess/${room.roomId}/${employeeId}`);
+        await api.delete(`/EmployeeRoomAccess/${room.roomId}/${employeeId}`);
         setEmployeesWithAccess(employeesWithAccess.filter(e => e.employeeId !== employeeId));
       } else {
-        const response = await api.post('/employeeroomaccess', { employeeId, roomId: room.roomId });
+        const response = await api.post('/EmployeeRoomAccess', { employeeId, roomId: room.roomId });
         setEmployeesWithAccess([...employeesWithAccess, response.data]);
       }
     } catch (err) {

@@ -161,6 +161,23 @@ namespace Nexus_webapi.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{roomId}/{employeeId}")]
+        public async Task<IActionResult> DeleteEmployeeRoomAccessByRoomIdAndEmployeeId(int roomId, int employeeId)
+        {
+            var access = await _context.EmployeeRoomAccesses
+                .FirstOrDefaultAsync(era => era.RoomId == roomId && era.EmployeeId == employeeId);
+
+            if (access == null)
+            {
+                return NotFound();
+            }
+
+            _context.EmployeeRoomAccesses.Remove(access);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool EmployeeRoomAccessExists(int id) => _context.EmployeeRoomAccesses.Any(era => era.AccessId == id);
     }
 

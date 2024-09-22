@@ -48,7 +48,7 @@ function App() {
               }
             />
             <Route
-              path="/room/:id/permission"
+              path="/room/:id/permissions"
               element={
                 <ProtectedRoute>
                   <RoomPermission />
