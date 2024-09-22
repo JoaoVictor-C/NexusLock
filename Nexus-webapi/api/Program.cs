@@ -118,9 +118,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("http://179.108.15.18:5173")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader());
     });
 
     // Add Authorization
@@ -168,7 +168,7 @@ void ConfigureMiddleware(WebApplication app)
 
     app.UseHttpsRedirection();
 
-    app.UseCors();
+    app.UseCors(); // Ensure CORS is enabled before Authentication
 
     app.UseAuthentication();
     app.UseAuthorization();
