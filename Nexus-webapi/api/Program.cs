@@ -129,7 +129,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddAuthorization(options =>
     {
         options.AddPolicy("AdminAccess", policy =>
-            policy.RequireClaim("Permission", "AdminAccess"));
+            policy.RequireClaim("permission", "AdminAccess"));
     });
 
     builder.Services.AddSwaggerGen(c =>

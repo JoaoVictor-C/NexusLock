@@ -37,9 +37,8 @@ const Login = () => {
           'Content-Type': 'application/json'
         }
       });
-      setAuth({
-        token: response.data.Token,
-      });
+      setAuth(response.data);
+      localStorage.setItem('auth', JSON.stringify(auth));
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed. Please check your credentials.');

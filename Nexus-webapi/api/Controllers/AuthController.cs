@@ -90,7 +90,7 @@ namespace Nexus_webapi.Controllers
         public async Task<IActionResult> GetUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _context.Employees.FindAsync(userId);
+            var user = await _context.Employees.FindAsync(int.Parse(userId));
             return Ok(user);
         }
         private string GenerateUniquePinCode()

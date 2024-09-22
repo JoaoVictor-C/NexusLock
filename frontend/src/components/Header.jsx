@@ -24,20 +24,24 @@ const Header = () => {
     const menuToggle = menuToggleRef.current;
     const navLinks = navLinksRef.current;
 
-    const handleToggle = () => {
-      navLinks.classList.toggle('active');
-    };
+    if (menuToggle && navLinks) {
+      const handleToggle = () => {
+        navLinks.classList.toggle('active');
+      };
 
-    menuToggle.addEventListener('click', handleToggle);
+      menuToggle.addEventListener('click', handleToggle);
+    }
 
     return () => {
-      menuToggle.removeEventListener('click', handleToggle);
+      if (menuToggle && navLinks) {
+        menuToggle.removeEventListener('click', handleToggle);
+      }
     };
   }, [auth]);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await api.get('/employees/isAdmin');
+      const response = await api.get('/Employees/isAdmin');
       setIsAdmin(response.data);
     };
     fetchUser();

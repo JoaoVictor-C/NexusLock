@@ -19,6 +19,7 @@ const Logout = () => {
     } finally {
       setAuth(null);
       navigate('/login');
+      localStorage.removeItem('auth');
     }
   };
 
