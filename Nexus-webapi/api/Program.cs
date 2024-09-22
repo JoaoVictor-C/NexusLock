@@ -95,8 +95,6 @@ var app = builder.Build();
 // Configure Middleware Pipeline
 ConfigureMiddleware(app);
 
-app.Urls.Add("http://0.0.0.0:80");
-app.Urls.Add("https://0.0.0.0:443");
 app.Urls.Add("http://0.0.0.0:5000");
 
 app.Run();
