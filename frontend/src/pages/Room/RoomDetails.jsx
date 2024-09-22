@@ -12,6 +12,7 @@ const RoomDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -28,6 +29,19 @@ const RoomDetails = () => {
 
     fetchRoomDetails();
   }, [id]);
+
+  const fetchIsAdmin = async () => {
+    setIsAdmin(false);
+    const response = await api.get('/Employees/isAdmin');
+    if (response.status === 200) {
+      setIsAdmin(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchIsAdmin();
+  }, []);
+
 
   const handleHistoryClick = () => {
     navigate(`/room/${id}/history`);
@@ -83,9 +97,15 @@ const RoomDetails = () => {
       <h2 className="text-center mb-4">{room.name}</h2>
       <div className="room-actions top d-flex justify-content-center gap-2 mb-4">
         <button className="btn btn-secondary" onClick={handleHistoryClick}>Histórico de uso</button>
-        <button className="btn btn-secondary" onClick={handlePermissionClick}>Controle de permissão</button>
-        <button className="btn btn-secondary" onClick={handleEditClick}>Editar sala</button>
+        {isAdmin && (
+          <button className="btn btn-secondary" onClick={handlePermissionClick}>Controle de permissão</button>
+        )}
+        {isAdmin && (
+          <button className="btn btn-secondary" onClick={handleEditClick}>Editar sala</button>
+        )}
       </div>
+
+      
       <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '50%' }}/>
       <div className="room-actions bottom d-flex justify-content-between w-50">
         <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
