@@ -86,6 +86,7 @@ builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
     loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+    loggingBuilder.AddFilter("Microsoft.AspNetCore.Cors.Infrastructure.CorsService", LogLevel.None);
 });
 
 builder.Environment.EnvironmentName = "Production";

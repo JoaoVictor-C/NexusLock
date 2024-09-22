@@ -9,6 +9,7 @@ const RoomPermission = () => {
   const [employeesWithAccess, setEmployeesWithAccess] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchRoomAndEmployees = async () => {
@@ -48,6 +49,14 @@ const RoomPermission = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredEmployees = employees.filter(employee =>
+    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) return <div className="text-center m-5"><div className="spinner-border" role="status"></div></div>;
   if (error) return <div className="alert alert-danger m-3">{error}</div>;
   if (!room) return <div className="alert alert-warning m-3">Room not found.</div>;
@@ -69,6 +78,15 @@ const RoomPermission = () => {
       </div>
 
       <h3 className="mb-3">Employee Access</h3>
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search employees..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <thead>
@@ -78,7 +96,7 @@ const RoomPermission = () => {
             </tr>
           </thead>
           <tbody>
-            {employees.map((employee) => (
+            {filteredEmployees.map((employee) => (
               <tr key={employee.employeeId}>
                 <td>{employee.name}</td>
                 <td>
@@ -89,6 +107,7 @@ const RoomPermission = () => {
                       id={`access-${employee.employeeId}`}
                       checked={employeesWithAccess.some(e => e.employeeId === employee.employeeId)}
                       onChange={() => handleToggleAccess(employee.employeeId)}
+                      style={{ cursor: 'pointer' }}
                     />
                     <label className="form-check-label" htmlFor={`access-${employee.employeeId}`}>
                       {employeesWithAccess.some(e => e.employeeId === employee.employeeId) ? 'Granted' : 'Not Granted'}
