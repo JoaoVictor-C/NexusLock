@@ -75,7 +75,7 @@ const RoomDetails = () => {
   };
 
   const handleBackClick = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   if (loading) {
@@ -105,7 +105,7 @@ const RoomDetails = () => {
         )}
       </div>
 
-      
+
       <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '50%' }}/>
       <div className="room-actions bottom d-flex justify-content-between w-50">
         <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>

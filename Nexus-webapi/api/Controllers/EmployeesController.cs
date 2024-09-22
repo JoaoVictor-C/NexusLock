@@ -32,7 +32,8 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = e.EmployeeId,
                     Name = e.Name,
                     FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null,
-                    Email = e.Email
+                    Email = e.Email,
+                    PinCode = e.PinCode
                 })
                 .ToListAsync();
 
@@ -52,7 +53,8 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = e.EmployeeId,
                     Name = e.Name,
                     FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null,
-                    Email = e.Email
+                    Email = e.Email,
+                    PinCode = e.PinCode
                 })
                 .FirstOrDefaultAsync();
 

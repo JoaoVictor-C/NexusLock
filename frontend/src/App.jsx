@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -8,12 +8,12 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './styles/global.css';
-import React, { useContext, useState, useEffect } from 'react';
+import React from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoomHistory from './pages/Room/RoomHistory';
 import RoomPermission from './pages/Room/RoomPermission';
 import RoomEdit from './pages/Room/RoomEdit';
-
+import AdminPanel from './pages/Admin/AdminPanel';
 function App() {
   return (
     <AuthProvider>
@@ -60,6 +60,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <RoomEdit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminPanel />
                 </ProtectedRoute>
               }
             />

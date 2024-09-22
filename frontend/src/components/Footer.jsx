@@ -14,7 +14,7 @@ const Footer = () => {
   
   return (
     showFooter && (
-      <footer className="footer">
+      <footer className="container-fluid d-flex justify-content-center align-items-center border-top py-4 mt-3">
         <p>&copy; {new Date().getFullYear()} NexusLock. All rights reserved.</p>
       </footer>
     )
