@@ -240,7 +240,7 @@ namespace Nexus_webapi.Controllers
 
             if (!hasAccess)
             {
-                return Forbid("Employee does not have access to this room.");
+                return StatusCode(403, "Employee does not have access to this room.");
             }
 
             room.Status = !room.Status;

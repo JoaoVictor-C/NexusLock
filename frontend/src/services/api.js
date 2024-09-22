@@ -17,4 +17,12 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+api.interceptors.request.use(
+  (config) => {
+    config.headers['Access-Control-Allow-Origin'] = '*';
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export default api;

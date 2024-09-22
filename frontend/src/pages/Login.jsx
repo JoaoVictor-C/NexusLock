@@ -26,7 +26,6 @@ const Login = () => {
   });
 
   const handleChange = e => {
-    console.log(e.target.name, e.target.value);
     if (e.target.name === 'username_and_email') {
       setForm({ ...form, username: e.target.value, email: e.target.value });
     } else {

@@ -39,8 +39,13 @@ const RoomDetails = () => {
     navigate(`/room/${id}/edit`);
   };
 
-  const handleReserveClick = () => {
-    api
+  const handleReserveClick = async () => {
+    const response = await api.post(`/Rooms/${id}/book`);
+    if (response.status === 200) {
+      setRoom({ ...room, status: !room.status });
+    } else if (response.status === 403) {
+      alert('Você não tem permissão para reservar esta sala.');
+    }
   };
 
   const handleBackClick = () => {
@@ -62,17 +67,20 @@ const RoomDetails = () => {
   const imageSrc = room.imageBase64 ? `data:image/png;base64,${room.imageBase64}` : defaultImage;
 
   return (
-    <div className="room-details">
-      <h2>{room.name}</h2>
-      <div className="room-actions top">
-        <button onClick={handleHistoryClick}>Histórico de uso</button>
-        <button onClick={handlePermissionClick}>Controle de permissão</button>
-        <button onClick={handleEditClick}>Editar sala</button>
+    <div className="room-details container py-4">
+      <h2 className="text-center mb-4">{room.name}</h2>
+      <div className="room-actions top d-flex justify-content-center gap-2 mb-4">
+        <button className="btn btn-secondary" onClick={handleHistoryClick}>Histórico de uso</button>
+        <button className="btn btn-secondary" onClick={handlePermissionClick}>Controle de permissão</button>
+        <button className="btn btn-secondary" onClick={handleEditClick}>Editar sala</button>
       </div>
-      <img src={imageSrc} alt={room.name} />
-      <div className="room-actions bottom">
-        <button className="back-button" onClick={handleBackClick}>Voltar</button>
-        <button className="reserve-button" onClick={handleReserveClick} disabled={room.status}>
+      <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" />
+      <div className="room-actions bottom d-flex justify-content-between w-100">
+        <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
+        <button 
+          className={`btn ${room.status ? 'btn-danger' : 'btn-success'}`} 
+          onClick={handleReserveClick}
+        >
           {room.status ? 'Sala Ocupada' : 'Reservar'}
         </button>
       </div>
