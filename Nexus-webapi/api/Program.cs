@@ -118,7 +118,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("http://179.108.15.18")
+            policy.WithOrigins("http://179.108.15.18:5173")
                     .AllowAnyMethod()
                     .AllowAnyHeader());
     });
