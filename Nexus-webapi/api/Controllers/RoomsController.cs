@@ -3,6 +3,7 @@ using Nexus_webapi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Nexus_webapi.Controllers
 {
@@ -231,11 +232,11 @@ namespace Nexus_webapi.Controllers
                 return NotFound("Room not found.");
             }
 
-            EmployeeId = 
+            var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             // Check if the employee has access to the room
             var hasAccess = await _context.EmployeeRoomAccesses
-                .AnyAsync(era => era.RoomId == id && era.EmployeeId == EmployeeId);
+                .AnyAsync(era => era.RoomId == id && era.EmployeeId == int.Parse(employeeId));
 
             if (!hasAccess)
             {
@@ -243,7 +244,7 @@ namespace Nexus_webapi.Controllers
             }
 
             room.Status = !room.Status;
-            room.OccupiedByEmployeeId = bookingDto.EmployeeId;
+            room.OccupiedByEmployeeId = int.Parse(employeeId);
 
             await _context.SaveChangesAsync();
 
