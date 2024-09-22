@@ -1,0 +1,92 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  background-image: url('../../assets/background-pattern.png');
+  background-repeat: repeat;
+}
+
+.register-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo {
+  display: block;
+  width: 100px;
+  margin: 0 auto 1rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #0066cc;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0052a3;
+}
+
+.form-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.password-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.password-input svg {
+  position: absolute;
+  right: 0.75rem;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #666;
+  transition: color 0.3s ease;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+.password-input svg:hover {
+  color: #333;
+}

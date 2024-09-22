@@ -1,0 +1,22 @@
+.room-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .room-details h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .room-details img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .room-details p {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }

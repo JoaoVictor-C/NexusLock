@@ -1,0 +1,25 @@
+.room-list {
+    padding: 20px;
+  }
+  
+  .room-list h2 {
+    margin-bottom: 20px;
+  }
+  
+  .room-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .room-list li {
+    margin-bottom: 10px;
+  }
+  
+  .room-list a {
+    text-decoration: none;
+    color: #282c34;
+  }
+  
+  .room-list a:hover {
+    color: #61dafb;
+  }
