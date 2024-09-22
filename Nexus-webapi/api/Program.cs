@@ -88,6 +88,8 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
 });
 
+builder.Environment.EnvironmentName = "Production";
+
 var app = builder.Build();
 
 // Configure Middleware Pipeline

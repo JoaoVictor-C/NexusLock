@@ -8,7 +8,7 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './styles/global.css';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {

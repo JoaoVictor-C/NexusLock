@@ -5,10 +5,6 @@ import '../styles/pages/Home.css';
 const Home = () => {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    api.get('/Auth/user').then(response => setUser(response.data));
-  }, []);
-
   return (
     <div className="home">
       <section className="hero">
