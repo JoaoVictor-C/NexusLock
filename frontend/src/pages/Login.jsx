@@ -20,7 +20,7 @@ const Login = () => {
   }, [auth, navigate]);
 
   const [form, setForm] = useState({
-    email: '',
+    username_email: '',
     password: '',
   });
 
@@ -55,10 +55,10 @@ const Login = () => {
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <input 
-              type="email" 
-              name="email" 
-              placeholder="E-mail" 
-              value={form.email} 
+              type="text" 
+              name="username_email" 
+              placeholder="E-mail ou Nome de usuário" 
+              value={form.username_email} 
               onChange={handleChange} 
               required 
             />

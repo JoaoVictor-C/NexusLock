@@ -195,6 +195,9 @@ namespace Nexus_webapi.Controllers
 
         private bool RoomExists(int id) => _context.Rooms.Any(r => r.RoomId == id);
 
+        /// <summary>
+        /// Retrieves employees with access to a specific room.
+        /// </summary>
         [HttpGet("{id}/employees")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesWithAccessToRoom(int id)
         {
@@ -216,6 +219,35 @@ namespace Nexus_webapi.Controllers
                 .ToListAsync();
 
             return Ok(employees);
+        }
+
+        [Authorize]
+        [HttpPost("{id}/book")]
+        public async Task<IActionResult> BookRoom(int id)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+            if (room == null)
+            {
+                return NotFound("Room not found.");
+            }
+
+            EmployeeId = 
+
+            // Check if the employee has access to the room
+            var hasAccess = await _context.EmployeeRoomAccesses
+                .AnyAsync(era => era.RoomId == id && era.EmployeeId == EmployeeId);
+
+            if (!hasAccess)
+            {
+                return Forbid("Employee does not have access to this room.");
+            }
+
+            room.Status = !room.Status;
+            room.OccupiedByEmployeeId = bookingDto.EmployeeId;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Room booked successfully." });
         }
     }
 
@@ -268,5 +300,11 @@ namespace Nexus_webapi.Controllers
         public string? ImageBase64 { get; set; }
 
         public int? OccupiedByEmployeeId { get; set; }
+    }
+
+    public class BookRoomDto
+    {
+        [Required]
+        public int EmployeeId { get; set; }
     }
 }
