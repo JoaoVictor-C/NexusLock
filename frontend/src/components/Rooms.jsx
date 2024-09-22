@@ -58,15 +58,7 @@ const Rooms = () => {
         view === 'grid' ? (
           <RoomGrid rooms={filteredRooms} handleAccess={handleAccess} />
         ) : (
-          <div>
-            <div className="d-flex flex-row justify-content-between align-items-center w-75">
-              <h5>Nome</h5>
-              <h5>Descrição</h5>
-              <h5>Status</h5>
-              <h5>Ação</h5>
-            </div>
-            <RoomList rooms={filteredRooms} handleAccess={handleAccess} />
-          </div>
+          <RoomList rooms={filteredRooms} handleAccess={handleAccess} />
         )
       ) : (
         <p>No rooms found.</p>

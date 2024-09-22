@@ -87,7 +87,7 @@ const RoomDetails = () => {
         <button className="btn btn-secondary" onClick={handleEditClick}>Editar sala</button>
       </div>
       <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '50%' }}/>
-      <div className="room-actions bottom d-flex justify-content-between w-100">
+      <div className="room-actions bottom d-flex justify-content-between w-50">
         <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
         <button 
           className={`btn ${room.status ? 'btn-danger' : 'btn-success'}`} 

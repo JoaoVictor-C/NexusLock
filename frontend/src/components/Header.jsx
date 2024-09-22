@@ -15,10 +15,8 @@ const Header = () => {
   const navLinksRef = useRef(null);
 
   const fetchUser = async () => {
-    console.log(auth);
     setIsAdmin(false);
     const response = await api.get('/Employees/isAdmin');
-    console.log(`Response status: ${response.status}`);
     if (response.status === 200) {
       setIsAdmin(true);
     }
@@ -58,7 +56,11 @@ const Header = () => {
       <header className="header">
         <div className="logo-header">
           <Link to="/">
-            <img src={senaiLogo} alt="SENAI Logo" className="senai-logo-header" />
+            <img
+              src={senaiLogo}
+              alt="SENAI Logo"
+              className="senai-logo-header"
+            />
           </Link>
         </div>
         <button className="menu-toggle" id="menu-toggle" ref={menuToggleRef}>

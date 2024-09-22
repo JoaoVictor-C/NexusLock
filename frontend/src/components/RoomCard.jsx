@@ -17,19 +17,36 @@ import defaultImage from '../assets/default-image.png';
          </h5>
          )}
        </div>
-       <div className={`card-body ${view === 'list' ? 'd-flex flex-row justify-content-between' : ''}`}>
+       <div className={`card-body ${view === 'list' ? 'd-flex flex-row justify-content-between align-items-center w-100' : ''}`}>
          {view === 'list' && (
-           <div className="d-flex flex-row gap-4">
-             <h5 className="card-title">{name}</h5>
-             <p className="card-text">{description}</p>
+          <div className="row w-100 align-items-center text-center">
+            <div className="col-3">
+              <h5 className="card-title mb-0">{name}</h5>
+            </div>
+            <div className="col-3">
+              <p className="card-text mb-0">{description}</p>
+            </div>
+            <div className="col-2">
+              <span className={`badge ${status ? 'bg-danger' : 'bg-success'} p-2 rounded m-0`}>
+                {status ? 'Ocupado' : 'Disponível'}
+              </span>
+            </div>
+            <div className="col-2">
+              <p className="card-text mb-0">{occupiedByEmployeeName || 'Disponível'}</p>
+            </div>
+            <div className="col-2">
+              <button className="btn btn-primary" onClick={() => handleAccess(room)}>Acessar</button>
+            </div>
+          </div>
+         )}
+         {view === 'grid' && (
+           <div className="d-flex justify-content-between align-items-center">
+             <p className={`p-2 rounded m-0 ${status ? 'bg-danger' : 'bg-success'} text-white`}>
+               {status ? 'Ocupado' : 'Disponível'}
+             </p>
+             <button className="btn btn-primary" onClick={() => handleAccess(room)}>Acessar</button>
            </div>
          )}
-         <div className={`d-flex ${view === 'list' ? 'flex-column' : 'justify-content-between align-items-center'}`}>
-           <p className={`${view === 'list' ? 'badge' : 'p-2 rounded m-0'} ${status ? 'bg-danger' : 'bg-success'} text-white`}>
-             {status ? 'Ocupado' : 'Disponível'}
-           </p>
-           <button className="btn btn-primary" onClick={() => {handleAccess(room)}}>Acessar</button>
-         </div>
        </div>
      </div>
    );

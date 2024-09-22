@@ -174,6 +174,31 @@ namespace Nexus_webapi.Controllers
             return Ok(logs);
         }
 
+        [HttpGet("room/{roomId}")]
+        public async Task<ActionResult<IEnumerable<AccessLogDto>>> GetAccessLogsByRoom(int roomId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var logs = await _context.AccessLogs
+                .Where(al => al.RoomId == roomId)
+                .Include(al => al.Employee)
+                .Include(al => al.Room)
+                .OrderByDescending(al => al.AccessTime)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(al => new AccessLogDto
+                {
+                    LogId = al.LogId,
+                    EmployeeId = al.EmployeeId,
+                    EmployeeName = al.Employee != null ? al.Employee.Name : null,
+                    RoomId = al.RoomId,
+                    RoomName = al.Room != null ? al.Room.Name : null,
+                    AccessTime = al.AccessTime,
+                    AccessGranted = al.AccessGranted
+                })
+                .ToListAsync();
+
+            return Ok(logs);
+        } 
+
         private bool AccessLogExists(int id) => _context.AccessLogs.Any(al => al.LogId == id);
     }
 
