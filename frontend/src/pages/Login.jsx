@@ -32,7 +32,11 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await api.post('/Auth/login', form);
+      const response = await api.post('/Auth/login', form, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       setAuth({
         token: response.data.Token,
       });
