@@ -53,6 +53,8 @@ namespace Nexus_webapi.Services
                               where er.EmployeeId == employee.EmployeeId
                               select p.PermissionKey;
 
+            Console.WriteLine("Permissions: " + string.Join(", ", permissions));
+
             foreach (var permission in permissions.Distinct())
             {
                 claims.Add(new Claim("permission", permission));
