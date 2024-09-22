@@ -20,12 +20,18 @@ const Login = () => {
   }, [auth, navigate]);
 
   const [form, setForm] = useState({
-    username_email: '',
+    username: '',
+    email: '',
     password: '',
   });
 
   const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    console.log(e.target.name, e.target.value);
+    if (e.target.name === 'username_and_email') {
+      setForm({ ...form, username: e.target.value, email: e.target.value });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async e => {
@@ -56,9 +62,9 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <input 
               type="text" 
-              name="username_email" 
+              name="username_and_email" 
               placeholder="E-mail ou Nome de usuário" 
-              value={form.username_email} 
+              value={form.username_and_email} 
               onChange={handleChange} 
               required 
             />
@@ -79,7 +85,7 @@ const Login = () => {
               <Link to="/forgot-password">Esqueci minha senha</Link>
               <Link to="/register">Novo aqui? (cadastrar)</Link>
             </div>
-            <button type="submit">Entrar</button>
+            <button type="submit" disabled={isLoading} className="login-button">Entrar</button>
           </form>
         </div>
       </div>
