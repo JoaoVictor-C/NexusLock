@@ -17,9 +17,9 @@ const Logout = () => {
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
+      localStorage.removeItem('auth');
       setAuth(null);
       navigate('/login');
-      localStorage.removeItem('auth');
     }
   };
 

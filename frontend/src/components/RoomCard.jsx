@@ -19,7 +19,7 @@ import defaultImage from '../assets/default-image.png';
        </div>
        <div className={`card-body ${view === 'list' ? 'd-flex flex-row justify-content-between' : ''}`}>
          {view === 'list' && (
-           <div className="d-flex flex-column">
+           <div className="d-flex flex-row gap-4">
              <h5 className="card-title">{name}</h5>
              <p className="card-text">{description}</p>
            </div>

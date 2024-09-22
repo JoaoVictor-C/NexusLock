@@ -14,7 +14,19 @@ const Header = () => {
   const menuToggleRef = useRef(null);
   const navLinksRef = useRef(null);
 
+  const fetchUser = async () => {
+    console.log(auth);
+    setIsAdmin(false);
+    const response = await api.get('/Employees/isAdmin');
+    console.log(`Response status: ${response.status}`);
+    if (response.status === 200) {
+      setIsAdmin(true);
+    }
+  };
+
   useEffect(() => {
+    fetchUser();
+
     if (auth) {
       setShowHeader(true);
     } else {
@@ -39,13 +51,7 @@ const Header = () => {
     };
   }, [auth]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await api.get('/Employees/isAdmin');
-      setIsAdmin(response.data);
-    };
-    fetchUser();
-  }, [auth]);
+
 
   return (
     showHeader && (

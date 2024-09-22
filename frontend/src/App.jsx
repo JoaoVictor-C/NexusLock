@@ -10,6 +10,9 @@ import Footer from './components/Footer';
 import './styles/global.css';
 import React, { useContext, useState, useEffect } from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
+import RoomHistory from './pages/Room/RoomHistory';
+import RoomPermission from './pages/Room/RoomPermission';
+import RoomEdit from './pages/Room/RoomEdit';
 
 function App() {
   return (
@@ -33,6 +36,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <RoomDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/room/:id/history"
+              element={
+                <ProtectedRoute>
+                  <RoomHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/room/:id/permission"
+              element={
+                <ProtectedRoute>
+                  <RoomPermission />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/room/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <RoomEdit />
                 </ProtectedRoute>
               }
             />
