@@ -109,6 +109,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddControllers();
     services.AddEndpointsApiExplorer();
 
+
+
     // Register Services and Handlers
     services.AddHostedService<TokenCleanupService>();
 
@@ -118,9 +120,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader());
+            policy.WithOrigins(builder.Configuration["AllowedHosts"])
+                .AllowAnyHeader()
+                .AllowAnyMethod());
     });
 
     // Add Authorization
