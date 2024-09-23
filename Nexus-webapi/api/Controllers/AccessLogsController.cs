@@ -196,7 +196,7 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
-            var totalCount = await logs.CountAsync();
+            var totalCount = await _context.AccessLogs.Where(al => al.RoomId == roomId).CountAsync();
 
             var result = new
             {
