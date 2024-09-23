@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {}
+    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\api.csproj": {}
   },
   "projects": {
-    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {
+    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "projectUniqueName": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\api.csproj",
         "projectName": "api",
-        "projectPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "projectPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\api.csproj",
         "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\obj\\",
+        "outputPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config"

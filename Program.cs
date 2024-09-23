@@ -11,65 +11,50 @@ using Nexus_webapi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add configuration for JWT
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
-
-// Configure Services
 ConfigureServices(builder.Services, builder.Configuration);
+ConfigureWebHost(builder.WebHost);
 
-// Set the URL to listen on the port provided by Cloud Run
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(int.Parse(port));
-});
-
-// Build the application
 var app = builder.Build();
 
-// Add Health Checks
-builder.Services.AddHealthChecks();
-
-app.MapHealthChecks("/health");
-
-// Configure Middleware Pipeline
 ConfigureMiddleware(app);
 
 app.Run();
 
-// Method to configure services
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
-    // Database Context
+    services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+
+    ConfigureDatabase(services, configuration);
+    ConfigureSwagger(services);
+    ConfigureCors(services);
+    ConfigureAuthorization(services);
+    ConfigureHealthChecks(services);
+
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddHostedService<TokenCleanupService>();
+    services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+}
+
+void ConfigureWebHost(IWebHostBuilder webHost)
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+    webHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(int.Parse(port));
+    });
+}
+
+void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
+{
     services.AddDbContext<NexusDbContext>(options =>
         options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
             new MySqlServerVersion(new Version(8, 0, 21))));
+}
 
-    // Controllers and Swagger
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-
-    // Register Services and Handlers
-    services.AddHostedService<TokenCleanupService>();
-    services.AddScoped<IAuthorizationHandler, PermissionHandler>();
-
-    // Configure CORS
-    services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
-    });
-
-    // Add Authorization
-    services.AddAuthorization(options =>
-    {
-        options.AddPolicy("AdminAccess", policy =>
-            policy.RequireClaim("permission", "AdminAccess"));
-    });
-
-    builder.Services.AddSwaggerGen(c =>
+void ConfigureSwagger(IServiceCollection services)
+{
+    services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nexus API", Version = "v1" });
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -98,19 +83,41 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     });
 }
 
-// Method to configure middleware
+void ConfigureCors(IServiceCollection services)
+{
+    services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+    });
+}
+
+void ConfigureAuthorization(IServiceCollection services)
+{
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminAccess", policy =>
+            policy.RequireClaim("permission", "AdminAccess"));
+    });
+}
+
+void ConfigureHealthChecks(IServiceCollection services)
+{
+    services.AddHealthChecks();
+}
+
 void ConfigureMiddleware(WebApplication app)
 {
-    // Enable Swagger in all environments
     app.UseSwagger();
     app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
-
-    app.UseCors(); // Ensure CORS is enabled before Authentication
-
+    app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
+    app.MapHealthChecks("/health");
 }
