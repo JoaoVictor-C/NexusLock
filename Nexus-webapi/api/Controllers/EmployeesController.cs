@@ -37,7 +37,9 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(employees);
+            var totalCount = await _context.Employees.CountAsync();
+
+            return Ok(new { totalCount, pageNumber, pageSize, employees });
         }
 
         /// <summary>

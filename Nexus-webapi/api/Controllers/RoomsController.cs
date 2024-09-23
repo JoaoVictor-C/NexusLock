@@ -39,7 +39,9 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(rooms);
+            var totalCount = await _context.Rooms.CountAsync();
+
+            return Ok(new { totalCount, pageNumber, pageSize, rooms });
         }
 
         /// <summary>

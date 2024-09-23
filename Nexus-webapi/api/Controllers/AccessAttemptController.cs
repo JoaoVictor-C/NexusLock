@@ -64,7 +64,7 @@ namespace Nexus_webapi.Controllers
         public int RoomId { get; set; }
 
         [Required]
-        public string AttemptType { get; set; } // "PinCode" or "Fingerprint"
+        public string AttemptType { get; set; }
 
         public string? PinCode { get; set; }
 

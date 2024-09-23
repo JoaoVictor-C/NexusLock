@@ -44,22 +44,22 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel container mt-4">
-      <h1 className="mb-4">Admin Panel</h1>
+      <h1 className="mb-4">Painel de Administração</h1>
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>Users</button>
+          <button className={`nav-link ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>Usuários</button>
         </li>
         <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => setActiveTab('roles')}>Roles</button>
+          <button className={`nav-link ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => setActiveTab('roles')}>Cargos</button>
         </li>
         <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'permissions' ? 'active' : ''}`} onClick={() => setActiveTab('permissions')}>Permissions</button>
+          <button className={`nav-link ${activeTab === 'permissions' ? 'active' : ''}`} onClick={() => setActiveTab('permissions')}>Permissões</button>
         </li>
         <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'rooms' ? 'active' : ''}`} onClick={() => setActiveTab('rooms')}>Rooms</button>
+          <button className={`nav-link ${activeTab === 'rooms' ? 'active' : ''}`} onClick={() => setActiveTab('rooms')}>Salas</button>
         </li>
         <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'logs' ? 'active' : ''}`} onClick={() => setActiveTab('logs')}>Access Logs</button>
+          <button className={`nav-link ${activeTab === 'logs' ? 'active' : ''}`} onClick={() => setActiveTab('logs')}>Logs de Acesso</button>
         </li>
       </ul>
       {renderActiveTab()}

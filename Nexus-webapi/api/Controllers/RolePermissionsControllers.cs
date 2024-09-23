@@ -38,7 +38,9 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(rolePermissions);
+            var totalCount = await _context.RolePermissions.CountAsync();
+
+            return Ok(new { totalCount, pageNumber, pageSize, rolePermissions });
         }
 
         /// <summary>
