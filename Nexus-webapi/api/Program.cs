@@ -91,7 +91,10 @@ builder.Services.AddLogging(loggingBuilder =>
 
 builder.Environment.EnvironmentName = "Production";
 
+builder.WebHost.UseUrls("http://0.0.0.0:8080");
+
 var app = builder.Build();
+
 
 // Configure Middleware Pipeline
 ConfigureMiddleware(app);
@@ -109,8 +112,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     // Controllers and Swagger
     services.AddControllers();
     services.AddEndpointsApiExplorer();
-
-
+    
 
     // Register Services and Handlers
     services.AddHostedService<TokenCleanupService>();
