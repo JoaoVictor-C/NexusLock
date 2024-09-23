@@ -115,7 +115,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     
 
     // Register Services and Handlers
-    services.AddHostedService<TokenCleanupService>();
+    // services.AddHostedService<TokenCleanupService>();
 
     services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
