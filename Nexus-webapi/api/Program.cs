@@ -105,9 +105,9 @@ app.Run();
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     // Database Context
-    //services.AddDbContext<NexusDbContext>(options =>
-    //    options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-    //        new MySqlServerVersion(new Version(8, 0, 21))));
+    services.AddDbContext<NexusDbContext>(options =>
+        options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
+            new MySqlServerVersion(new Version(8, 0, 21))));
 
     // Controllers and Swagger
     services.AddControllers();
@@ -115,9 +115,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     
 
     // Register Services and Handlers
-    // services.AddHostedService<TokenCleanupService>();
+    services.AddHostedService<TokenCleanupService>();
 
-    // services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+    services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
     // Configure CORS
     services.AddCors(options =>
@@ -129,11 +129,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     });
 
     // Add Authorization
-    // services.AddAuthorization(options =>
-    // {
-    //     options.AddPolicy("AdminAccess", policy =>
-    //         policy.RequireClaim("permission", "AdminAccess"));
-    // });
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminAccess", policy =>
+            policy.RequireClaim("permission", "AdminAccess"));
+    });
 
     builder.Services.AddSwaggerGen(c =>
     {
