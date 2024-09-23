@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Modal, Button, Form, Container, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Modal, Button, Form, Container, Row, Col, Card, Alert, Pagination } from 'react-bootstrap';
 
 const RoleManagement = () => {
   const [roles, setRoles] = useState([]);
@@ -13,15 +13,27 @@ const RoleManagement = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState('');
+  const [pagination, setPagination] = useState({
+    totalCount: 0,
+    pageNumber: 1,
+    pageSize: 10
+  });
 
   useEffect(() => {
     fetchRoles();
-  }, []);
+  }, [pagination.pageNumber]);
 
   const fetchRoles = async () => {
     try {
-      const response = await api.get('/Roles');
-      setRoles(response.data);
+      const response = await api.get('/Roles', {
+        params: {
+          pageNumber: pagination.pageNumber,
+          pageSize: pagination.pageSize
+        }
+      });
+      const { totalCount, pageNumber, pageSize, roles: fetchedRoles } = response.data;
+      setRoles(fetchedRoles);
+      setPagination({ totalCount, pageNumber, pageSize });
       setLoading(false);
     } catch (err) {
       console.error('Error fetching roles:', err);
@@ -78,6 +90,10 @@ const RoleManagement = () => {
     setShowConfirmModal(true);
   };
 
+  const handlePageChange = (pageNumber) => {
+    setPagination(prev => ({ ...prev, pageNumber }));
+  };
+
   if (loading) return <div className="text-center mt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>;
   if (error) return <Alert variant="danger" className="mt-3">{error}</Alert>;
 
@@ -106,23 +122,29 @@ const RoleManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {roles.map((role) => (
-                  <tr key={role.roleId}>
-                    <td>{role.roleName}</td>
-                    <td>{role.description}</td>
-                    <td className="text-center gap-2 d-flex justify-content-center">
-                      <Button variant="outline-warning" size="sm" className="mr-2" onClick={() => {
-                        setEditingRole(role);
-                        setShowEditRoleModal(true);
-                      }}>
-                        <i className="fas fa-edit mr-1"></i>Editar
-                      </Button>
-                      <Button variant="outline-danger" size="sm" onClick={() => handleDeleteRole(role.roleId)}>
-                        <i className="fas fa-trash-alt mr-1"></i>Excluir
-                      </Button>
-                    </td>
+                {roles.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="text-center">Nenhum cargo encontrado</td>
                   </tr>
-                ))}
+                ) : (
+                  roles.map((role) => (
+                    <tr key={role.roleId}>
+                        <td>{role.roleName}</td>
+                        <td>{role.description}</td>
+                        <td className="text-center gap-2 d-flex justify-content-center">
+                        <Button variant="outline-warning" size="sm" className="mr-2" onClick={() => {
+                            setEditingRole(role);
+                            setShowEditRoleModal(true);
+                        }}>
+                            <i className="fas fa-edit mr-1"></i>Editar
+                        </Button>
+                        <Button variant="outline-danger" size="sm" onClick={() => handleDeleteRole(role.roleId)}>
+                            <i className="fas fa-trash-alt mr-1"></i>Excluir
+                        </Button>
+                        </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -222,6 +244,22 @@ const RoleManagement = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Pagination className="justify-content-center mt-3">
+        <Pagination.First onClick={() => handlePageChange(1)} disabled={pagination.pageNumber === 1} />
+        <Pagination.Prev onClick={() => handlePageChange(pagination.pageNumber - 1)} disabled={pagination.pageNumber === 1} />
+        {[...Array(Math.ceil(pagination.totalCount / pagination.pageSize)).keys()].map((page) => (
+          <Pagination.Item
+            key={page + 1}
+            active={page + 1 === pagination.pageNumber}
+            onClick={() => handlePageChange(page + 1)}
+          >
+            {page + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next onClick={() => handlePageChange(pagination.pageNumber + 1)} disabled={pagination.pageNumber === Math.ceil(pagination.totalCount / pagination.pageSize)} />
+        <Pagination.Last onClick={() => handlePageChange(Math.ceil(pagination.totalCount / pagination.pageSize))} disabled={pagination.pageNumber === Math.ceil(pagination.totalCount / pagination.pageSize)} />
+      </Pagination>
     </Container>
   );
 };
