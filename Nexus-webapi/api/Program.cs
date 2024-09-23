@@ -14,85 +14,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add configuration for JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
-var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
-
 // Configure Services
 ConfigureServices(builder.Services, builder.Configuration);
 
-// Add Authorization
-builder.Services.AddAuthorization(options =>
+// Set the URL to listen on the port provided by Cloud Run
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.ConfigureKestrel(options =>
 {
-    options.AddPolicy("AdminAccess", policy =>
-        policy.RequireClaim("Permission", "AdminAccess"));
+    options.ListenAnyIP(int.Parse(port));
 });
 
-// Add Authentication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = true;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = jwtSettings.Issuer,
-        ValidateAudience = true,
-        ValidAudience = jwtSettings.Audience,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateLifetime = true,
-    };
-
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-            {
-                context.Token = authHeader.Substring("Bearer ".Length).Trim();
-            }
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            Console.WriteLine($"Token validated for user: {context.Principal?.Identity?.Name}");
-            return Task.CompletedTask;
-        },
-        OnAuthenticationFailed = context =>
-        {
-            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            return Task.CompletedTask;
-        },
-        OnChallenge = context =>
-        {
-            Console.WriteLine($"Authentication challenge issued: {context.Error}, {context.ErrorDescription}");
-            return Task.CompletedTask;
-        }
-    };
-});
-
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-// Add Token Cleanup Service
-builder.Services.AddHostedService<TokenCleanupService>();
-
-builder.Services.AddLogging(loggingBuilder =>
-{
-    loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
-    loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
-    loggingBuilder.AddFilter("Microsoft.AspNetCore.Cors.Infrastructure.CorsService", LogLevel.None);
-});
-
-builder.Environment.EnvironmentName = "Production";
-
-builder.WebHost.UseUrls("http://0.0.0.0:8080");
-
+// Build the application
 var app = builder.Build();
 
 // Add Health Checks
@@ -116,18 +48,16 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     // Controllers and Swagger
     services.AddControllers();
     services.AddEndpointsApiExplorer();
-    
 
     // Register Services and Handlers
     services.AddHostedService<TokenCleanupService>();
-
     services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
     // Configure CORS
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("https://nexus-lock.vercel.app")
+            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18")
             .AllowAnyHeader()
             .AllowAnyMethod());
     });
