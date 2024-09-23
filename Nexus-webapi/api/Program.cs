@@ -91,6 +91,7 @@ builder.Services.AddLogging(loggingBuilder =>
 
 builder.Environment.EnvironmentName = "Production";
 
+builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
 var app = builder.Build();
 
