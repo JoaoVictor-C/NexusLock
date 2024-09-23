@@ -196,6 +196,8 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
+            var totalCount = await logs.CountAsync();
+
             var result = new
             {
                 TotalCount = totalCount,
