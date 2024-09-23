@@ -105,9 +105,9 @@ app.Run();
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     // Database Context
-    services.AddDbContext<NexusDbContext>(options =>
-        options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-            new MySqlServerVersion(new Version(8, 0, 21))));
+    //services.AddDbContext<NexusDbContext>(options =>
+    //    options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
+    //        new MySqlServerVersion(new Version(8, 0, 21))));
 
     // Controllers and Swagger
     services.AddControllers();
