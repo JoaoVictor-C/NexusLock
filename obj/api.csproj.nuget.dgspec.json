@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[2.1.35, )"
             },
+            "Google.Cloud.SecretManager.V1": {
+              "target": "Package",
+              "version": "[2.5.0, )"
+            },
             "IdentityModel": {
               "target": "Package",
               "version": "[7.0.0, )"
