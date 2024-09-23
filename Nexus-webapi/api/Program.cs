@@ -95,6 +95,10 @@ builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
 var app = builder.Build();
 
+// Add Health Checks
+builder.Services.AddHealthChecks();
+
+app.MapHealthChecks("/health");
 
 // Configure Middleware Pipeline
 ConfigureMiddleware(app);
