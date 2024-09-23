@@ -1,13 +1,17 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
-WORKDIR /
-# Copy csproj and restore as distinct layers
+# Use the official .NET 8.0 SDK image for building the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+
+# Copy the csproj file and restore dependencies
 COPY *.csproj ./
 RUN dotnet restore
-# Copy everything else and build
+
+# Copy the remaining source code and publish the application
 COPY . ./
 RUN dotnet publish -c Release -o out
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+
+# Use the official .NET 8.0 runtime image for running the application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=build-env /app/out ./
 ENTRYPOINT ["dotnet", "api.dll"]
