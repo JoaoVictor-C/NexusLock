@@ -117,7 +117,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     // Register Services and Handlers
     // services.AddHostedService<TokenCleanupService>();
 
-    services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+    // services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
     // Configure CORS
     services.AddCors(options =>
@@ -129,11 +129,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     });
 
     // Add Authorization
-    services.AddAuthorization(options =>
-    {
-        options.AddPolicy("AdminAccess", policy =>
-            policy.RequireClaim("permission", "AdminAccess"));
-    });
+    // services.AddAuthorization(options =>
+    // {
+    //     options.AddPolicy("AdminAccess", policy =>
+    //         policy.RequireClaim("permission", "AdminAccess"));
+    // });
 
     builder.Services.AddSwaggerGen(c =>
     {
