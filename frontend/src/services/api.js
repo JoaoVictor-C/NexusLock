@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'http://34.151.227.196/api',
+  baseURL: 'https://nexuslock-941324057012.southamerica-east1.run.app/api',
 });
 
 // Request interceptor to attach token
