@@ -121,9 +121,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("*")
-                .AllowAnyHeader()
-                .AllowAnyMethod());
+            policy.WithOrigins("https://nexus-lock.vercel.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
     });
 
     // Add Authorization

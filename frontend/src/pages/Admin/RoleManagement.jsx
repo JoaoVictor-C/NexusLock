@@ -94,7 +94,7 @@ const RoleManagement = () => {
     setPagination(prev => ({ ...prev, pageNumber }));
   };
 
-  if (loading) return <div className="text-center mt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>;
+  if (loading) return <div className="text-center mt-5"><div className="spinner-border" role="status"><span className="sr-only"></span></div></div>;
   if (error) return <Alert variant="danger" className="mt-3">{error}</Alert>;
 
   return (

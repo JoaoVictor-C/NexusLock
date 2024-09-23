@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'http://34.151.216.220/api',
+  baseURL: 'https://34.151.216.220/api',
 });
 
 // Request interceptor to attach token
@@ -12,14 +12,6 @@ api.interceptors.request.use(
     if (storedAuth && storedAuth.token) {
       config.headers.Authorization = `Bearer ${storedAuth.token}`;
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-api.interceptors.request.use(
-  (config) => {
-    config.headers['Access-Control-Allow-Origin'] = '*';
     return config;
   },
   (error) => Promise.reject(error)
