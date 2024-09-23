@@ -86,6 +86,7 @@ const RoomHistory = () => {
             <table className="table table-striped table-hover">
               <thead>
                 <tr>
+                  <th>ID do Log</th>
                   <th>Funcionário</th>
                   <th>Horário de Acesso</th>
                   <th>Acesso Concedido</th>
@@ -94,6 +95,7 @@ const RoomHistory = () => {
               <tbody>
                 {accessLogs.map((log) => (
                   <tr key={log.logId}>
+                    <td>{log.logId}</td>
                     <td>{log.employeeName}</td>
                     <td>{new Date(log.accessTime).toLocaleString()}</td>
                     <td>

@@ -123,7 +123,7 @@ const RoomPermission = () => {
             ))}
           </tbody>
         </table>
-        <button className="btn btn-primary" onClick={handleBackClick}>Voltar</button>
+        <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
       </div>
     </div>
   );
