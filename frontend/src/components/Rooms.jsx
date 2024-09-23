@@ -7,20 +7,27 @@ import { useNavigate } from 'react-router-dom';
 const Rooms = () => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
-  const [view, setView] = useState('grid'); // 'grid' or 'list'
+  const [view, setView] = useState('grid');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredRooms, setFilteredRooms] = useState([]);
 
   useEffect(() => {
-    api.get('/rooms')
-      .then(response => setRooms(response.data))
-      .catch(error => console.error('Error fetching rooms:', error));
-  }, []);
 
-  // Filter rooms based on search term
-  const filteredRooms = rooms.filter(room =>
-    room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    room.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const filterRooms = () => {
+      const filteredRooms = rooms.filter(room =>
+        room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        room.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRooms(filteredRooms);
+    };
+
+    const fetchRooms = async () => {
+      const response = await api.get('/rooms');
+      setRooms(response.data);
+      filterRooms();
+    };
+    fetchRooms();
+  }, []);
 
   const handleAccess = (room) => {
     navigate(`/room/${room.roomId}`);
