@@ -196,7 +196,15 @@ namespace Nexus_webapi.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(logs);
+            var result = new
+            {
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Logs = logs
+            };
+
+            return Ok(result);
         } 
 
         private bool AccessLogExists(int id) => _context.AccessLogs.Any(al => al.LogId == id);

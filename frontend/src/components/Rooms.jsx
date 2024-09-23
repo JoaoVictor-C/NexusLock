@@ -12,22 +12,33 @@ const Rooms = () => {
   const [filteredRooms, setFilteredRooms] = useState([]);
 
   useEffect(() => {
-
-    const filterRooms = () => {
-      const filteredRooms = rooms.filter(room =>
-        room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        room.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredRooms(filteredRooms);
-    };
-
     const fetchRooms = async () => {
-      const response = await api.get('/rooms');
-      setRooms(response.data);
-      filterRooms();
+      try {
+        const response = await api.get('/rooms');
+        setRooms(Array.isArray(response.data.rooms) ? response.data.rooms : []);
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+        setRooms([]);
+      }
     };
     fetchRooms();
   }, []);
+
+  useEffect(() => {
+    const filterRooms = () => {
+      if (!Array.isArray(rooms)) {
+        console.error('Rooms is not an array:', rooms);
+        setFilteredRooms([]);
+        return;
+      }
+      const filtered = rooms.filter(room =>
+        room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        room.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRooms(filtered);
+    };
+    filterRooms();
+  }, [rooms, searchTerm]);
 
   const handleAccess = (room) => {
     navigate(`/room/${room.roomId}`);

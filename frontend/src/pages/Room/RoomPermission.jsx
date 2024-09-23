@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 const RoomPermission = () => {
@@ -10,6 +10,7 @@ const RoomPermission = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRoomAndEmployees = async () => {
@@ -20,12 +21,12 @@ const RoomPermission = () => {
           api.get(`/rooms/${id}/employees`)
         ]);
         setRoom(roomResponse.data);
-        setEmployees(employeesResponse.data);
+        setEmployees(employeesResponse.data.employees);
         setEmployeesWithAccess(accessResponse.data);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching room and employees:', err);
-        setError('Failed to load room permissions. Please try again later.');
+        console.error('Erro ao buscar sala e funcionários:', err);
+        setError('Falha ao carregar permissões da sala. Por favor, tente novamente mais tarde.');
         setLoading(false);
       }
     };
@@ -44,13 +45,17 @@ const RoomPermission = () => {
         setEmployeesWithAccess([...employeesWithAccess, response.data]);
       }
     } catch (err) {
-      console.error('Error toggling access:', err);
-      setError('Failed to update access. Please try again.');
+      console.error('Erro ao alternar acesso:', err);
+      setError('Falha ao atualizar acesso. Por favor, tente novamente.');
     }
   };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
   };
 
   const filteredEmployees = employees.filter(employee =>
@@ -59,30 +64,30 @@ const RoomPermission = () => {
 
   if (loading) return <div className="text-center m-5"><div className="spinner-border" role="status"></div></div>;
   if (error) return <div className="alert alert-danger m-3">{error}</div>;
-  if (!room) return <div className="alert alert-warning m-3">Room not found.</div>;
+  if (!room) return <div className="alert alert-warning m-3">Sala não encontrada.</div>;
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Room Permissions: {room.name}</h2>
+      <h2 className="mb-4">Permissões da Sala: {room.name}</h2>
       <div className="card mb-4">
         <div className="card-body">
-          <h5 className="card-title">Room Details</h5>
-          <p className="card-text"><strong>Description:</strong> {room.description}</p>
+          <h5 className="card-title">Detalhes da Sala</h5>
+          <p className="card-text"><strong>Descrição:</strong> {room.description}</p>
           <p className="card-text">
             <strong>Status:</strong> 
             <span className={`badge ${room.status ? 'bg-danger' : 'bg-success'} ms-2`}>
-              {room.status ? 'Occupied' : 'Available'}
+              {room.status ? 'Ocupada' : 'Disponível'}
             </span>
           </p>
         </div>
       </div>
 
-      <h3 className="mb-3">Employee Access</h3>
+      <h3 className="mb-3">Acesso de Funcionários</h3>
       <div className="mb-3">
         <input
           type="text"
           className="form-control"
-          placeholder="Search employees..."
+          placeholder="Pesquisar funcionários..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
@@ -91,8 +96,8 @@ const RoomPermission = () => {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
-              <th>Employee Name</th>
-              <th>Access</th>
+              <th>Nome do Funcionário</th>
+              <th>Acesso</th>
             </tr>
           </thead>
           <tbody>
@@ -110,7 +115,7 @@ const RoomPermission = () => {
                       style={{ cursor: 'pointer' }}
                     />
                     <label className="form-check-label" htmlFor={`access-${employee.employeeId}`}>
-                      {employeesWithAccess.some(e => e.employeeId === employee.employeeId) ? 'Granted' : 'Not Granted'}
+                      {employeesWithAccess.some(e => e.employeeId === employee.employeeId) ? 'Concedido' : 'Não Concedido'}
                     </label>
                   </div>
                 </td>
@@ -118,6 +123,7 @@ const RoomPermission = () => {
             ))}
           </tbody>
         </table>
+        <button className="btn btn-primary" onClick={handleBackClick}>Voltar</button>
       </div>
     </div>
   );

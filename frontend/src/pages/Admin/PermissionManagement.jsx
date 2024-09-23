@@ -32,7 +32,7 @@ const PermissionManagement = () => {
         }
       });
       const { totalCount, pageNumber, pageSize, permissions: fetchedPermissions } = response.data;
-      setPermissions(fetchedPermissions);
+      setPermissions(Array.isArray(fetchedPermissions) ? fetchedPermissions : []);
       setPagination({ totalCount, pageNumber, pageSize });
       setLoading(false);
     } catch (err) {
