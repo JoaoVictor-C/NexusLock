@@ -35,6 +35,20 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddHostedService<TokenCleanupService>();
     services.AddScoped<IAuthorizationHandler, PermissionHandler>();
     services.AddScoped<IAuthService, AuthService>();
+
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+            };
+        });
 }
 
 void ConfigureWebHost(IWebHostBuilder webHost)
@@ -89,9 +103,9 @@ void ConfigureCors(IServiceCollection services)
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+            policy.WithOrigins("*")
+                .AllowAnyHeader()
+                .AllowAnyMethod());
     });
 }
 
