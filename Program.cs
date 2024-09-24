@@ -34,6 +34,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddEndpointsApiExplorer();
     services.AddHostedService<TokenCleanupService>();
     services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+    services.AddScoped<IAuthService, AuthService>();
 }
 
 void ConfigureWebHost(IWebHostBuilder webHost)
