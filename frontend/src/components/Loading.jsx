@@ -1,11 +1,13 @@
 import React from 'react';
-import '../styles/components/Loading.css';
+import { Spinner, Container } from 'react-bootstrap';
 
 const Loading = () => {
   return (
-    <div className="loading-container">
-      <div className="loading-spinner"></div>
-    </div>
+    <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Spinner animation="border" role="status" variant="primary" style={{ width: '3rem', height: '3rem' }}>
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    </Container>
   );
 };
 

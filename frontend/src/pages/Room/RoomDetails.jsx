@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import '../../styles/pages/RoomDetails.css';
 import defaultImage from '../../assets/default-image.png';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Table } from 'react-bootstrap';
+import { FaUsers, FaWifi, FaChalkboard, FaUser } from 'react-icons/fa';
 
 const RoomDetails = () => {
   const { id } = useParams();
@@ -13,12 +13,16 @@ const RoomDetails = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [equipment, setEquipment] = useState([]);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
         const response = await api.get(`/rooms/${id}`);
         setRoom(response.data);
+        console.log(response.data);
+        // Assuming the API returns equipment information
+        setEquipment(response.data.equipment || []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching room details:', error);
@@ -32,16 +36,19 @@ const RoomDetails = () => {
 
   const fetchIsAdmin = async () => {
     setIsAdmin(false);
-    const response = await api.get('/Employees/isAdmin');
-    if (response.status === 200) {
-      setIsAdmin(true);
+    try {
+      const response = await api.get('/Employees/isAdmin');
+      if (response.status === 200) {
+        setIsAdmin(true);
+      }
+    } catch (err) {
+      console.error('Error checking admin status:', err);
     }
   };
 
   useEffect(() => {
     fetchIsAdmin();
   }, []);
-
 
   const handleHistoryClick = () => {
     navigate(`/room/${id}/history`);
@@ -68,32 +75,41 @@ const RoomDetails = () => {
         alert('Você não tem permissão para reservar esta sala.');
       }
     } catch (error) {
-      console.error('Error booking room:', error);
-      alert('Ocorreu um erro ao tentar reservar a sala. Por favor, tente novamente.');
+      console.error('Error reserving room:', error);
+      alert('Falha ao reservar sala. Por favor, tente novamente.');
+    } finally {
+      setShowModal(false);
     }
-    setShowModal(false);
   };
 
   const handleBackClick = () => {
     navigate('/');
   };
 
+  const renderEquipmentIcon = (type) => {
+    switch (type) {
+      case 'Whiteboard': return <FaChalkboard />;
+      case 'WiFi': return <FaWifi />;
+      default: return null;
+    }
+  };
+
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="text-center my-5"><div className="spinner-border" role="status"></div></div>;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="alert alert-danger text-center my-5">{error}</div>;
   }
 
   if (!room) {
-    return <div className="not-found">Room not found</div>;
+    return <div className="alert alert-warning text-center my-5">Room not found</div>;
   }
 
   const imageSrc = room.imageBase64 ? `data:image/png;base64,${room.imageBase64}` : defaultImage;
 
   return (
-    <div className="room-details container py-4 d-flex flex-column align-items-center">
+    <div className="container py-4 d-flex flex-column align-items-center">
       <h2 className="text-center mb-4">{room.name}</h2>
       <div className="room-actions top d-flex justify-content-center gap-2 mb-4">
         <button className="btn btn-secondary" onClick={handleHistoryClick}>Histórico de uso</button>
@@ -105,15 +121,51 @@ const RoomDetails = () => {
         )}
       </div>
 
+      <div className="row">
+        <div className="col-md-6">
+          <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '100%' }}/>
+        </div>
+        <div className="col-md-6">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <th>ID</th>
+                <td>{room.roomId}</td>
+              </tr>
+              <tr>
+                <th>Nome</th>
+                <td>{room.name}</td>
+              </tr>
+              <tr>
+                <th>Descrição</th>
+                <td>{room.description}</td>
+              </tr>
+              <tr>
+                <th>Status</th>
+                <td>
+                  <span className={`badge bg-${room.status ? 'danger' : 'success'}`}>
+                    {room.status ? 'Ocupada' : 'Disponível'}
+                  </span>
+                </td>
+              </tr>
+              {room.status && (
+                <tr>
+                  <th>Ocupada por</th>
+                  <td><FaUser /> {room.occupiedByEmployeeName}</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </div>
+      </div>
 
-      <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '50%' }}/>
-      <div className="room-actions bottom d-flex justify-content-between w-50">
+      <div className="room-actions bottom d-flex justify-content-between mt-4">
         <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
         <button 
           className={`btn ${room.status ? 'btn-danger' : 'btn-success'}`} 
           onClick={handleReserveClick}
         >
-          {room.status ? 'Sala Ocupada' : 'Reservar'}
+          {room.status ? 'Liberar Sala' : 'Reservar'}
         </button>
       </div>
 

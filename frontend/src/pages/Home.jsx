@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Rooms from '../components/Rooms';
-import '../styles/pages/Home.css';
 import api from '../services/api';
 
 const Home = () => {
@@ -39,9 +38,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home">
-      <section className="hero">
-        <h1>{randomMessage}</h1>
+    <div className="p-3">
+      <section className="py-5 px-3 mb-4 text-center">
+        <h1 className="display-4">{randomMessage}</h1>
       </section>
       <Rooms />
     </div>

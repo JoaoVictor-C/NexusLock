@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import '../styles/components/Footer.css';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { Container } from 'react-bootstrap';
 
 const Footer = () => {
   const { auth } = useContext(AuthContext);
@@ -9,13 +9,17 @@ const Footer = () => {
   useEffect(() => {
     if (auth) {
       setShowFooter(true);
+    } else {
+      setShowFooter(false);
     }
   }, [auth]);
-  
+
   return (
     showFooter && (
-      <footer className="container-fluid d-flex justify-content-center align-items-center border-top py-4 mt-3">
-        <p>&copy; {new Date().getFullYear()} NexusLock. All rights reserved.</p>
+      <footer className="bg-white text-dark py-3 shadow-sm">
+        <Container className="text-center">
+          &copy; {new Date().getFullYear()} NexusLock. All rights reserved.
+        </Container>
       </footer>
     )
   );

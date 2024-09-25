@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 
 const RoomEdit = () => {
   const { id } = useParams();
@@ -47,8 +48,8 @@ const RoomEdit = () => {
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          const maxWidth = 800; // Set your desired max width
-          const maxHeight = 600; // Set your desired max height
+          const maxWidth = 800;
+          const maxHeight = 600;
           let width = img.width;
           let height = img.height;
 
@@ -68,7 +69,7 @@ const RoomEdit = () => {
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
 
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); // Adjust quality as needed
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
           const base64String = compressedBase64.split(',')[1];
           setRoom(prevRoom => ({ ...prevRoom, imageBase64: base64String }));
         };
@@ -105,57 +106,51 @@ const RoomEdit = () => {
     navigate(-1);
   };
 
-  if (loading) return <div className="text-center m-5"><div className="spinner-border" role="status"></div></div>;
-  if (error) return <div className="alert alert-danger m-3">{error}</div>;
+  if (loading) return <div className="text-center my-5"><div className="spinner-border" role="status"></div></div>;
+  if (error) return <Alert variant="danger" className="text-center my-5">{error}</Alert>;
 
   return (
-    <div className="container mt-4">
+    <Container className="mt-4">
       <h2 className="mb-4">Editar Sala: {room.name}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Nome</label>
-          <input
+      <Form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow">
+        <Form.Group className="mb-3">
+          <Form.Label>Nome</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
-            id="name"
             name="name"
             value={room.name}
             onChange={handleInputChange}
             required
           />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">Descrição</label>
-          <textarea
-            className="form-control"
-            id="description"
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Descrição</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
             name="description"
             value={room.description}
             onChange={handleInputChange}
           />
-        </div>
-        <div className="mb-3 form-check">
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3 form-check">
+          <Form.Check
             type="checkbox"
-            className="form-check-input"
-            id="status"
+            label="Ocupada"
             name="status"
             checked={room.status}
             onChange={handleInputChange}
           />
-          <label className="form-check-label" htmlFor="status">Ocupada</label>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="image" className="form-label">Imagem da Sala</label>
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Imagem da Sala</Form.Label>
+          <Form.Control
             type="file"
-            className="form-control"
-            id="image"
             name="image"
             onChange={handleImageChange}
             accept="image/*"
           />
-        </div>
+        </Form.Group>
         {room.imageBase64 && (
           <div className="mb-3">
             <img
@@ -167,12 +162,12 @@ const RoomEdit = () => {
           </div>
         )}
         <div className="d-flex justify-content-between gap-4 mb-3">
-          <button type="button" className="btn btn-secondary w-100" onClick={handleBackClick}>Voltar</button>
-          <button type="submit" className="btn btn-primary w-100">Atualizar Sala</button>
-          <button type="button" className="btn btn-danger w-100" onClick={handleDelete}>Excluir Sala</button>
+          <Button variant="secondary" onClick={handleBackClick} className="w-100">Voltar</Button>
+          <Button variant="primary" type="submit" className="w-100">Atualizar Sala</Button>
+          <Button variant="danger" onClick={handleDelete} className="w-100">Excluir Sala</Button>
         </div>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
 

@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/pages/NotFound.css';
 
 const NotFound = () => {
   return (
-    <div className="not-found">
-      <h1>404 - Página Não Encontrada</h1>
-      <p>A página que você está procurando não existe.</p>
-      <Link to="/">Voltar para a página inicial</Link>
+    <div
+      className="d-flex flex-column align-items-center justify-content-center"
+      style={{ height: '80vh', textAlign: 'center' }}
+    >
+      <h1 className="display-4 mb-3">404 - Página Não Encontrada</h1>
+      <p className="h5 mb-4">A página que você está procurando não existe.</p>
+      <Link to="/" className="btn btn-primary">
+        Voltar para a página inicial
+      </Link>
     </div>
   );
 };

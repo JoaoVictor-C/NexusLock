@@ -2,11 +2,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import api from '../services/api';
-import '../styles/pages/Register.css';
 import senaiLogo from '../assets/senai-logo.png';
 import Loading from '../components/Loading';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-
+import backgroundPattern from '../assets/background-pattern.png';
 const Register = () => {
   const { setAuth, auth } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,11 +67,11 @@ const Register = () => {
 
   return (
     isLoading ? <Loading /> : (
-      <div className="register-container">
-        <div className="register-form">
-          <img src={senaiLogo} alt="SENAI Logo" className="logo" />
-          <h2>Cadastro</h2>
-          <p className="form-subtitle">Preencha os campos</p>
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light" style={{ backgroundImage: `url(${backgroundPattern})` }}>
+        <div className="bg-white p-4 rounded shadow" style={{ width: '100%', maxWidth: '400px' }}>
+          <img src={senaiLogo} alt="SENAI Logo" className="mx-auto d-block mb-3" style={{ width: '200px' }} />
+          <h2 className="text-center mb-4 text-dark">Cadastro</h2>
+          <p className="text-center text-muted mb-4">Preencha os campos</p>
           <form onSubmit={handleSubmit}>
             <input 
               type="text" 
@@ -81,6 +80,7 @@ const Register = () => {
               value={form.name} 
               onChange={handleChange} 
               required 
+              className="form-control mb-3" 
             />
             <input 
               type="email" 
@@ -89,8 +89,9 @@ const Register = () => {
               value={form.email} 
               onChange={handleChange} 
               required 
+              className="form-control mb-3" 
             />
-            <div className="password-input">
+            <div className="position-relative mb-3">
               <input 
                 type={passwordIsVisible ? "text" : "password"} 
                 name="password" 
@@ -98,13 +99,20 @@ const Register = () => {
                 value={form.password} 
                 onChange={handleChange} 
                 required 
-                style={{ borderColor: form.password && !passwordsMatch ? 'red' : '' }}
+                className={`form-control ${form.password && !passwordsMatch ? 'is-invalid' : ''}`}
               />
-              {passwordIsVisible 
-                ? <EyeSlashIcon onClick={() => setPasswordIsVisible(!passwordIsVisible)} /> 
-                : <EyeIcon onClick={() => setPasswordIsVisible(!passwordIsVisible)} />}
+              <div className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                {passwordIsVisible 
+                  ? <EyeSlashIcon onClick={() => setPasswordIsVisible(!passwordIsVisible)} className="h-5 w-5 text-muted" /> 
+                  : <EyeIcon onClick={() => setPasswordIsVisible(!passwordIsVisible)} className="h-5 w-5 text-muted" />}
+              </div>
+              {form.password && !passwordsMatch && (
+                <div className="invalid-feedback">
+                  As senhas não são iguais
+                </div>
+              )}
             </div>
-            <div className="password-input">
+            <div className="position-relative mb-3">
               <input 
                 type={confirmPasswordIsVisible ? "text" : "password"} 
                 name="confirmPassword" 
@@ -112,20 +120,22 @@ const Register = () => {
                 value={form.confirmPassword} 
                 onChange={handleChange} 
                 required 
-                style={{ borderColor: form.confirmPassword && !passwordsMatch ? 'red' : '' }}
+                className={`form-control ${form.confirmPassword && !passwordsMatch ? 'is-invalid' : ''}`}
               />
-              {confirmPasswordIsVisible 
-                ? <EyeSlashIcon onClick={() => setConfirmPasswordIsVisible(!confirmPasswordIsVisible)} /> 
-                : <EyeIcon onClick={() => setConfirmPasswordIsVisible(!confirmPasswordIsVisible)} />}
+              <div className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                {confirmPasswordIsVisible 
+                  ? <EyeSlashIcon onClick={() => setConfirmPasswordIsVisible(!confirmPasswordIsVisible)} className="h-5 w-5 text-muted" /> 
+                  : <EyeIcon onClick={() => setConfirmPasswordIsVisible(!confirmPasswordIsVisible)} className="h-5 w-5 text-muted" />}
+              </div>
+              {form.confirmPassword && !passwordsMatch && (
+                <div className="invalid-feedback">
+                  As senhas não são iguais
+                </div>
+              )}
             </div>
-            {form.confirmPassword && !passwordsMatch && (
-              <p style={{ color: 'red', marginTop: '-10px', marginBottom: '10px' }}>
-                As senhas não são iguais
-              </p>
-            )}
-            <button type="submit">Cadastrar</button>
-            <p className="form-subtitle">
-              Já possui uma conta? <Link to="/login" style={{ color: 'blue', textDecoration: 'none' }}>Entrar</Link>
+            <button type="submit" className="btn btn-primary w-100 mb-3">Cadastrar</button>
+            <p className="text-center text-muted">
+              Já possui uma conta? <Link to="/login" className="text-primary text-decoration-none">Entrar</Link>
             </p>
           </form>
         </div>
