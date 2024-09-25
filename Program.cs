@@ -105,7 +105,7 @@ void ConfigureCors(IServiceCollection services)
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
-            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18")
+            policy.WithOrigins("https://nexus-lock.vercel.app", "http://179.108.15.18", "http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod()
         );
