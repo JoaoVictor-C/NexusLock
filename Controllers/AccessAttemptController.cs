@@ -19,25 +19,37 @@ namespace Nexus_webapi.Controllers
         [HttpPost("attempt")]
         public async Task<IActionResult> AttemptAccess(AccessAttemptDto attemptDto)
         {
-            var employee = await _context.Employees.FindAsync(attemptDto.EmployeeId);
-            var room = await _context.Rooms.FindAsync(attemptDto.RoomId);
-
-            if (employee == null || room == null)
+            if (attemptDto.PinCode == null && attemptDto.FingerprintData == null)
             {
-                return BadRequest("Invalid employee or room.");
+                return BadRequest("Invalid attempt.");
             }
 
+            var room = await _context.Rooms.FindAsync(attemptDto.RoomId);
+            if (room == null)
+            {
+                return BadRequest("Invalid room.");
+            }
+
+            Employees employee = null;
             bool accessGranted = false;
 
             if (attemptDto.AttemptType == "PinCode")
             {
-                accessGranted = employee.PinCode == attemptDto.PinCode;
+                employee = await _context.Employees.FirstOrDefaultAsync(e => e.PinCode == attemptDto.PinCode);
+                if (employee != null)
+                {
+                    accessGranted = true;
+                }
             }
             else if (attemptDto.AttemptType == "Fingerprint")
             {
-                // Implement fingerprint verification logic here
-                // For now, we'll just check if the employee has fingerprint data
-                accessGranted = employee.FingerprintData != null;
+                // TODO: Implement fingerprint verification logic
+                employee = await _context.Employees.FirstOrDefaultAsync(e => e.PinCode == attemptDto.PinCode);
+            }
+
+            if (employee == null)
+            {
+                return BadRequest("Invalid employee credentials.");
             }
 
             var accessLog = new AccessLogs
@@ -57,9 +69,6 @@ namespace Nexus_webapi.Controllers
 
     public class AccessAttemptDto
     {
-        [Required]
-        public int EmployeeId { get; set; }
-
         [Required]
         public int RoomId { get; set; }
 
