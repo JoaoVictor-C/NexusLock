@@ -14,6 +14,7 @@ const RoomDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [equipment, setEquipment] = useState([]);
+  const [canAccessRoom, setCanAccessRoom] = useState(false);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -31,7 +32,18 @@ const RoomDetails = () => {
       }
     };
 
+    const checkRoomAccess = async () => {
+      try {
+        const response = await api.get(`/rooms/${id}/access`);
+        setCanAccessRoom(response.data.hasAccess);
+      } catch (error) {
+        console.error('Error checking room access:', error);
+        setCanAccessRoom(false);
+      }
+    };
+
     fetchRoomDetails();
+    checkRoomAccess();
   }, [id]);
 
   const fetchIsAdmin = async () => {
@@ -115,7 +127,7 @@ const RoomDetails = () => {
 
       <div className="row">
         <div className="col-md-6">
-          <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '100%' }}/>
+          <img src={imageSrc} alt={room.name} className="img-fluid rounded mb-4" style={{ width: '100%', maxHeight: '400px' }}/>
         </div>
         <div className="col-md-6">
           <Table striped bordered hover>
@@ -151,11 +163,12 @@ const RoomDetails = () => {
         </div>
       </div>
 
-      <div className="room-actions bottom d-flex justify-content-between mt-4">
+      <div className="room-actions bottom d-flex justify-content-between mt-4 gap-3">
         <button className="btn btn-secondary" onClick={handleBackClick}>Voltar</button>
         <button 
           className={`btn ${room.status ? 'btn-danger' : 'btn-success'}`} 
           onClick={handleReserveClick}
+          disabled={!canAccessRoom}
         >
           {room.status ? 'Liberar Sala' : 'Reservar'}
         </button>
