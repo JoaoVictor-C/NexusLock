@@ -3,8 +3,8 @@ import api from '../services/api';
 import RoomGrid from './RoomGrid';
 import RoomList from './RoomList';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, InputGroup, ButtonGroup, ToggleButton } from 'react-bootstrap';
-import { BsGrid, BsList } from 'react-icons/bs';
+import { Container, Form, InputGroup, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
+import { BsGrid, BsList, BsFilter } from 'react-icons/bs';
 
 const Rooms = () => {
   const navigate = useNavigate();
@@ -13,6 +13,8 @@ const Rooms = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('name');
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -40,12 +42,26 @@ const Rooms = () => {
       setFilteredRooms([]);
       return;
     }
-    const filtered = rooms.filter(room =>
+    let filtered = rooms.filter(room =>
       room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       room.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(room => room.status === (statusFilter === 'occupied'));
+    }
+
+    filtered.sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === 'status') {
+        return a.status === b.status ? 0 : a.status ? -1 : 1;
+      }
+      return 0;
+    });
+
     setFilteredRooms(filtered);
-  }, [rooms, searchTerm]);  
+  }, [rooms, searchTerm, statusFilter, sortBy]);  
 
   const handleAccess = (room) => {
     navigate(`/room/${room.roomId}`);
@@ -64,30 +80,51 @@ const Rooms = () => {
             />
           </InputGroup>
         </Form>
-        {!isMobile && (
-          <ButtonGroup>
-            <ToggleButton
-              type="radio"
-              variant="outline-primary"
-              name="view"
-              value="grid"
-              checked={view === 'grid'}
-              onClick={() => setView('grid')}
-            >
-              <BsGrid />
-            </ToggleButton>
-            <ToggleButton
-              type="radio"
-              variant="outline-primary"
-              name="view"
-              value="list"
-              checked={view === 'list'}
-              onClick={() => setView('list')}
-            >
-              <BsList />
-            </ToggleButton>
-          </ButtonGroup>
-        )}
+        <div className="d-flex">
+          <Dropdown className="me-2">
+            <Dropdown.Toggle variant="outline-secondary" id="dropdown-filter">
+              <BsFilter /> Filter
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setStatusFilter('all')}>All Rooms</Dropdown.Item>
+              <Dropdown.Item onClick={() => setStatusFilter('available')}>Available</Dropdown.Item>
+              <Dropdown.Item onClick={() => setStatusFilter('occupied')}>Occupied</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown className="me-2">
+            <Dropdown.Toggle variant="outline-secondary" id="dropdown-sort">
+              Sort By
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setSortBy('name')}>Name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSortBy('status')}>Status</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          {!isMobile && (
+            <ButtonGroup>
+              <ToggleButton
+                type="radio"
+                variant="outline-primary"
+                name="view"
+                value="grid"
+                checked={view === 'grid'}
+                onClick={() => setView('grid')}
+              >
+                <BsGrid />
+              </ToggleButton>
+              <ToggleButton
+                type="radio"
+                variant="outline-primary"
+                name="view"
+                value="list"
+                checked={view === 'list'}
+                onClick={() => setView('list')}
+              >
+                <BsList />
+              </ToggleButton>
+            </ButtonGroup>
+          )}
+        </div>
       </div>
 
       {filteredRooms.length > 0 ? (
