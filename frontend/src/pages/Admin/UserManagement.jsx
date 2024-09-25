@@ -101,14 +101,14 @@ const UserManagement = () => {
   if (error) return <Alert variant="danger" className="mt-3">{error}</Alert>;
 
   return (
-    <Container className="user-management mt-4">
+    <Container fluid className="user-management mt-4">
       <Row className="mb-4">
-        <Col>
+        <Col xs={12} md={6}>
           <h2 className="text-primary">Gerenciamento de Usuários</h2>
         </Col>
-        <Col className="text-right">
+        <Col xs={12} md={6} className="text-md-end mt-3 mt-md-0">
           <Button variant="success" onClick={() => setShowNewUserModal(true)}>
-            <i className="fas fa-plus mr-2"></i>Criar Novo Usuário
+            <i className="fas fa-plus me-2"></i>Criar Novo Usuário
           </Button>
         </Col>
       </Row>
@@ -136,15 +136,15 @@ const UserManagement = () => {
                       <td>{user.name}</td>
                       <td>{user.email}</td>
                       <td>{user.pinCode}</td>
-                      <td className="text-center gap-2 d-flex justify-content-center">
-                        <Button variant="outline-warning" size="sm" className="mr-2" onClick={() => {
+                      <td className="text-center">
+                        <Button variant="outline-warning" size="sm" className="me-2 mb-2 mb-md-0" onClick={() => {
                           setEditingUser(user);
                           setShowEditUserModal(true);
                         }}>
-                          <i className="fas fa-edit mr-1"></i>Editar
+                          <i className="fas fa-edit me-1"></i>Editar
                         </Button>
                         <Button variant="outline-danger" size="sm" onClick={() => handleDeleteUser(user.employeeId)}>
-                          <i className="fas fa-trash-alt mr-1"></i>Excluir
+                          <i className="fas fa-trash-alt me-1"></i>Excluir
                         </Button>
                       </td>
                     </tr>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Modal, Button, Form, Container, Row, Col, Card, Alert, Pagination } from 'react-bootstrap';
+import { Modal, Button, Form, Container, Row, Col, Card, Alert, Pagination, Spinner } from 'react-bootstrap';
 
 const RoomManagement = () => {
   const [rooms, setRooms] = useState([]);
@@ -23,11 +23,9 @@ const RoomManagement = () => {
     fetchRooms();
   }, [pagination.pageNumber]);
 
-  useEffect(() => {
-    fetchRooms();
-  }, []);
-
   const fetchRooms = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await api.get('/Rooms', {
         params: {
@@ -38,10 +36,10 @@ const RoomManagement = () => {
       const { totalCount, pageNumber, pageSize, rooms: fetchedRooms } = response.data;
       setRooms(fetchedRooms);
       setPagination({ totalCount, pageNumber, pageSize });
-      setLoading(false);
     } catch (err) {
       console.error('Erro ao buscar salas:', err);
       setError('Falha ao carregar salas. Por favor, tente novamente.');
+    } finally {
       setLoading(false);
     }
   };
@@ -98,60 +96,73 @@ const RoomManagement = () => {
     setPagination(prev => ({ ...prev, pageNumber }));
   };
 
-  if (loading) return <div className="text-center mt-5"><div className="spinner-border" role="status"><span className="sr-only"></span></div></div>;
-  if (error) return <Alert variant="danger" className="mt-3">{error}</Alert>;
-
   return (
-    <Container className="room-management mt-4">
+    <Container fluid className="room-management mt-4">
       <Row className="mb-4">
-        <Col>
+        <Col xs={12} md={6}>
           <h2 className="text-primary">Gerenciamento de Salas</h2>
         </Col>
-        <Col className="text-right">
+        <Col xs={12} md={6} className="text-md-end mt-3 mt-md-0">
           <Button variant="success" onClick={() => setShowNewRoomModal(true)}>
-            <i className="fas fa-plus mr-2"></i>Criar Nova Sala
+            <i className="fas fa-plus me-2"></i>Criar Nova Sala
           </Button>
         </Col>
       </Row>
       
+      {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
+      
       <Card>
         <Card.Body>
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead className="thead-light">
-                <tr>
-                  <th>Nome da Sala</th>
-                  <th>Descrição</th>
-                  <th className="text-center">Status</th>
-                  <th className="text-center">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rooms.map((room) => (
-                  <tr key={room.roomId}>
-                    <td>{room.name}</td>
-                    <td>{room.description}</td>
-                    <td className="text-center">
-                      <span className={`badge ${room.status ? 'bg-danger' : 'bg-success'}`}>
-                        {room.status ? 'Ocupada' : 'Disponível'}
-                      </span>
-                    </td>
-                    <td className="text-center gap-2 d-flex justify-content-center">
-                      <Button variant="outline-warning" size="sm" className="mr-2" onClick={() => {
-                        setEditingRoom(room);
-                        setShowEditRoomModal(true);
-                      }}>
-                        <i className="fas fa-edit mr-1"></i>Editar
-                      </Button>
-                      <Button variant="outline-danger" size="sm" onClick={() => handleDeleteRoom(room.roomId)}>
-                        <i className="fas fa-trash-alt mr-1"></i>Excluir
-                      </Button>
-                    </td>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Carregando...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover">
+                <thead className="thead-light">
+                  <tr>
+                    <th>Nome da Sala</th>
+                    <th>Descrição</th>
+                    <th className="text-center">Status</th>
+                    <th className="text-center">Ações</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {rooms.length === 0 ? (
+                    <tr>
+                      <td colSpan="4" className="text-center">Nenhuma sala encontrada</td>
+                    </tr>
+                  ) : (
+                    rooms.map((room) => (
+                      <tr key={room.roomId}>
+                        <td>{room.name}</td>
+                        <td>{room.description}</td>
+                        <td className="text-center">
+                          <span className={`badge ${room.status ? 'bg-danger' : 'bg-success'}`}>
+                            {room.status ? 'Ocupada' : 'Disponível'}
+                          </span>
+                        </td>
+                        <td className="text-center">
+                          <Button variant="outline-warning" size="sm" className="me-2 mb-2 mb-md-0" onClick={() => {
+                            setEditingRoom(room);
+                            setShowEditRoomModal(true);
+                          }}>
+                            <i className="fas fa-edit me-1"></i>Editar
+                          </Button>
+                          <Button variant="outline-danger" size="sm" onClick={() => handleDeleteRoom(room.roomId)}>
+                            <i className="fas fa-trash-alt me-1"></i>Excluir
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </Card.Body>
       </Card>
 
