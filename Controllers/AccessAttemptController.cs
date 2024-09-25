@@ -19,19 +19,19 @@ namespace Nexus_webapi.Controllers
         [HttpPost("attempt")]
         public async Task<IActionResult> AttemptAccess(AccessAttemptDto attemptDto)
         {
-            var employee = await _context.Employees.FindAsync(attemptDto.EmployeeId);
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.PinCode == attemptDto.PinCode);
             var room = await _context.Rooms.FindAsync(attemptDto.RoomId);
 
             if (employee == null || room == null)
             {
-                return BadRequest("Invalid employee or room.");
+                return BadRequest("Invalid PIN code or room.");
             }
 
             bool accessGranted = false;
 
             if (attemptDto.AttemptType == "PinCode")
             {
-                accessGranted = employee.PinCode == attemptDto.PinCode;
+                accessGranted = true; // Since we've already found the employee by PIN code
             }
             else if (attemptDto.AttemptType == "Fingerprint")
             {
@@ -58,15 +58,13 @@ namespace Nexus_webapi.Controllers
     public class AccessAttemptDto
     {
         [Required]
-        public int EmployeeId { get; set; }
+        public string PinCode { get; set; }
 
         [Required]
         public int RoomId { get; set; }
 
         [Required]
         public string AttemptType { get; set; }
-
-        public string? PinCode { get; set; }
 
         public string? FingerprintData { get; set; }
     }
