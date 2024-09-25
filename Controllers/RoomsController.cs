@@ -252,6 +252,18 @@ namespace Nexus_webapi.Controllers
 
             return Ok(new { message = "Room booked successfully." });
         }
+
+        [Authorize]
+        [HttpPost("{id}/can-book")]
+        public async Task<IActionResult> CanBookRoom(int id)
+        {
+            // We get the user by the token, and then we check if the user has access to the room
+            var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var hasAccess = await _context.EmployeeRoomAccesses
+                .AnyAsync(era => era.EmployeeId == int.Parse(employeeId) && era.RoomId == id);
+
+            return Ok(new { hasAccess });
+        }
     }
 
     // DTOs
