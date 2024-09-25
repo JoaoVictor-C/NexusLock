@@ -188,28 +188,32 @@ const RoomManagement = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group>
-              <Form.Label>Nome</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="roomName">Nome</Form.Label>
               <Form.Control
                 type="text"
+                id="roomName"
                 placeholder="Digite o nome da sala"
                 value={newRoom.name}
                 onChange={(e) => setNewRoom({ ...newRoom, name: e.target.value })}
+                required
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>Descrição</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="roomDescription">Descrição</Form.Label>
               <Form.Control
                 as="textarea"
+                id="roomDescription"
                 rows={3}
                 placeholder="Digite a descrição da sala"
                 value={newRoom.description}
                 onChange={(e) => setNewRoom({ ...newRoom, description: e.target.value })}
               />
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Check
-                type="checkbox"
+                type="switch"
+                id="roomStatus"
                 label="Sala está ocupada"
                 checked={newRoom.status}
                 onChange={(e) => setNewRoom({ ...newRoom, status: e.target.checked })}

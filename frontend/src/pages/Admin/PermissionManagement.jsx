@@ -167,29 +167,33 @@ const PermissionManagement = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group>
-              <Form.Label>Chave da Permissão</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="permissionKey">Chave da Permissão</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter permission key"
+                id="permissionKey"
+                placeholder="Digite a chave da permissão"
                 value={newPermission.permissionKey}
                 onChange={(e) => setNewPermission({ ...newPermission, permissionKey: e.target.value })}
+                required
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>Descrição</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="permissionDescription">Descrição</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter description"
+                id="permissionDescription"
+                placeholder="Digite a descrição da permissão"
                 value={newPermission.description}
                 onChange={(e) => setNewPermission({ ...newPermission, description: e.target.value })}
+                required
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowNewPermissionModal(false)}>
-            Close
+            Fechar
           </Button>
           <Button variant="primary" onClick={handleCreatePermission}>
             Criar Permissão

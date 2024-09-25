@@ -153,25 +153,28 @@ const RoleManagement = () => {
 
       <Modal show={showNewRoleModal} onHide={() => setShowNewRoleModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Criar Nova Cargo</Modal.Title>
+          <Modal.Title>Criar Novo Cargo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group>
-              <Form.Label>Nome da Cargo</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="roleName">Nome do Cargo</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter role name"
+                id="roleName"
+                placeholder="Digite o nome do cargo"
                 value={newRole.roleName}
                 onChange={(e) => setNewRole({ ...newRole, roleName: e.target.value })}
+                required
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>Descrição</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="roleDescription">Descrição</Form.Label>
               <Form.Control
                 as="textarea"
+                id="roleDescription"
                 rows={3}
-                placeholder="Enter description"
+                placeholder="Digite a descrição do cargo"
                 value={newRole.description}
                 onChange={(e) => setNewRole({ ...newRole, description: e.target.value })}
               />
@@ -180,7 +183,7 @@ const RoleManagement = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowNewRoleModal(false)}>
-            Close
+            Fechar
           </Button>
           <Button variant="primary" onClick={handleCreateRole}>
             Criar Cargo
