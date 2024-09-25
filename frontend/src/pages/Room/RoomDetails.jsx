@@ -34,7 +34,7 @@ const RoomDetails = () => {
 
     const checkRoomAccess = async () => {
       try {
-        const response = await api.get(`/rooms/${id}/can-book`);
+        const response = await api.post(`/rooms/${id}/can-book`);
         setCanAccessRoom(response.data.hasAccess);
       } catch (error) {
         console.error('Error checking room access:', error);
