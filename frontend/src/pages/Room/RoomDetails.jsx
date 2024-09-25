@@ -86,14 +86,6 @@ const RoomDetails = () => {
     navigate('/');
   };
 
-  const renderEquipmentIcon = (type) => {
-    switch (type) {
-      case 'Whiteboard': return <FaChalkboard />;
-      case 'WiFi': return <FaWifi />;
-      default: return null;
-    }
-  };
-
   if (loading) {
     return <div className="text-center my-5"><div className="spinner-border" role="status"></div></div>;
   }
