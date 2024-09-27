@@ -1,22 +1,16 @@
 import axios from 'axios';
-import { isTokenExpired } from '../utils/auth';
 
+// Create an axios instance
 const api = axios.create({
   baseURL: 'https://nexuslock-941324057012.southamerica-east1.run.app/api',
 });
 
+// Request interceptor to attach token
 api.interceptors.request.use(
-  async (config) => {
+  (config) => {
     const storedAuth = JSON.parse(localStorage.getItem('auth'));
     if (storedAuth && storedAuth.token) {
-      if (isTokenExpired(storedAuth.token)) {
-        // Token is expired. Redirect to login.
-        localStorage.removeItem('auth');
-        window.location.href = '/login';
-        return Promise.reject(new Error('Token expired'));
-      } else {
-        config.headers.Authorization = `Bearer ${storedAuth.token}`;
-      }
+      config.headers.Authorization = `Bearer ${storedAuth.token}`;
     }
     return config;
   },
