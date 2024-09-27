@@ -25,7 +25,6 @@ api.interceptors.response.use(
     const tokenExpired = await isTokenExpired();
     if (tokenExpired) {
       localStorage.removeItem('auth');
-      window.location.href = '/login'; 
       return Promise.reject('Token expired');
     }
     return Promise.reject(error);
