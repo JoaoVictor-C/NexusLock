@@ -121,6 +121,11 @@ void ConfigureAuthorization(IServiceCollection services)
     });
 }
 
+void ConfigureHealthChecks(IServiceCollection services)
+{
+    services.AddHealthChecks();
+}
+
 void ConfigureMiddleware(WebApplication app)
 {
     app.UseSwagger();
@@ -132,4 +137,5 @@ void ConfigureMiddleware(WebApplication app)
     app.UseAuthorization();
 
     app.MapControllers();
+    app.MapHealthChecks("/health");
 }
