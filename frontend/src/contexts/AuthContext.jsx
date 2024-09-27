@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
     if (auth) {
       if (isTokenExpired(auth.token)) {
         setAuth(null);
+        localStorage.removeItem('auth');
         navigate('/login');
       } else {
         localStorage.setItem('auth', JSON.stringify(auth));
