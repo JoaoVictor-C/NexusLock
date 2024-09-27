@@ -13,7 +13,7 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const storedAuth = JSON.parse(localStorage.getItem('auth'));
-    if (storedAuth && !await isTokenExpired(storedAuth.token)) {
+    if (storedAuth && !await isTokenExpired()) {
       config.headers.Authorization = `Bearer ${storedAuth.token}`;
     }
     return config;

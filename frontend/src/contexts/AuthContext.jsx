@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     } else {
       localStorage.removeItem('auth');
     }
-
   }, [auth]);
 
   return (
