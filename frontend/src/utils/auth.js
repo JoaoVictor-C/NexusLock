@@ -1,13 +1,12 @@
-import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
-export const isTokenExpired = (token) => {
+export const isTokenExpired = async (token) => {
   if (!token) return true;
   try {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    return decodedToken.exp < currentTime;
+    const response = await axios.post('https://nexuslock-941324057012.southamerica-east1.run.app/api/is-token-valid', { token });
+    return !response.data.isValid;
   } catch (error) {
-    console.error('Error decoding token:', error);
+    console.error('Error validating token:', error);
     return true;
   }
 };
