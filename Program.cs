@@ -80,7 +80,8 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
 {
     services.AddDbContext<NexusDbContext>(options =>
         options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-            new MySqlServerVersion(new Version(8, 0, 21))));
+            new MySqlServerVersion(new Version(8, 0, 21)))
+            .LogTo(_ => {}, LogLevel.None)); // This line disables EF Core query logging
 }
 
 void ConfigureSwagger(IServiceCollection services)
