@@ -82,6 +82,13 @@ namespace Nexus_webapi.Controllers
             return Ok(new { Token = token });
         }
 
+        [HttpPost("is-token-valid")]
+        public async Task<IActionResult> IsTokenValid([FromBody] string token)
+        {
+            var isValid = await _authService.IsTokenValidAsync(token);
+            return Ok(new { IsValid = isValid });
+        }
+
         /// <summary>
         /// Gets the authenticated user.
         /// </summary>
@@ -112,5 +119,6 @@ namespace Nexus_webapi.Controllers
             public string Email { get; set; }
             public string Password { get; set; }
         }
+
     }
 }

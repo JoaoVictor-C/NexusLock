@@ -5,5 +5,6 @@ namespace Nexus_webapi.Services
     public interface IAuthService
     {
         Task<string> GenerateTokenAsync(Employees employee);
+        Task<bool> IsTokenValidAsync(string token);
     }
 }
