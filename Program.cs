@@ -41,14 +41,27 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.IncludeErrorDetails = true; // Enables detailed error messages
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
+                ValidateLifetime = true, // Ensure lifetime is validated
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                ClockSkew = TimeSpan.Zero // Optional: Reduces the default clock skew
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogError("Authentication failed.", context.Exception);
+                    return Task.CompletedTask;
+                }
             };
         });
 }
@@ -133,6 +146,7 @@ void ConfigureMiddleware(WebApplication app)
 
     app.UseHttpsRedirection();
     app.UseCors();
+    
     app.UseAuthentication();
     app.UseAuthorization();
 
