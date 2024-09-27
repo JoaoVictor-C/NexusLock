@@ -83,20 +83,20 @@ const Rooms = () => {
         <div className="d-flex">
           <Dropdown className="me-2">
             <Dropdown.Toggle variant="outline-secondary" id="dropdown-filter">
-              <BsFilter /> Filter
+              <BsFilter /> Filtrar
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => setStatusFilter('all')}>All Rooms</Dropdown.Item>
-              <Dropdown.Item onClick={() => setStatusFilter('available')}>Available</Dropdown.Item>
-              <Dropdown.Item onClick={() => setStatusFilter('occupied')}>Occupied</Dropdown.Item>
+              <Dropdown.Item onClick={() => setStatusFilter('all')}>Todas as salas</Dropdown.Item>
+              <Dropdown.Item onClick={() => setStatusFilter('available')}>Disponíveis</Dropdown.Item>
+              <Dropdown.Item onClick={() => setStatusFilter('occupied')}>Ocupadas</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown className="me-2">
             <Dropdown.Toggle variant="outline-secondary" id="dropdown-sort">
-              Sort By
+              Ordenar por
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => setSortBy('name')}>Name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSortBy('name')}>Nome</Dropdown.Item>
               <Dropdown.Item onClick={() => setSortBy('status')}>Status</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -134,7 +134,7 @@ const Rooms = () => {
           <RoomList rooms={filteredRooms} handleAccess={handleAccess} />
         )
       ) : (
-        <p className="text-center">No rooms found.</p>
+        <p className="text-center">Nenhuma sala encontrada.</p>
       )}
     </Container>
   );
