@@ -51,8 +51,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-                ClockSkew = TimeSpan.Zero // Optional: Reduces the default clock skew
+                ClockSkew = TimeSpan.Zero // Optiona l: Reduces the default clock skew
             };
+
 
             options.Events = new JwtBearerEvents
             {
@@ -146,7 +147,7 @@ void ConfigureMiddleware(WebApplication app)
 
     app.UseHttpsRedirection();
     app.UseCors();
-    
+
     app.UseAuthentication();
     app.UseAuthorization();
 
