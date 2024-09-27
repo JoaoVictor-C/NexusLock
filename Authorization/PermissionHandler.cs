@@ -15,13 +15,33 @@ namespace Nexus_webapi.Authorization
             _context = context;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
             // Retrieve the employee ID from claims
             var employeeIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (employeeIdClaim == null || !int.TryParse(employeeIdClaim, out int employeeId))
+            var token = context.User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value; // Assuming you store JWT ID
+
+            if (employeeIdClaim == null || !int.TryParse(employeeIdClaim, out int employeeId) || string.IsNullOrEmpty(token))
             {
-                return Task.CompletedTask; // User is not authenticated or invalid employee ID
+                return;
+            }
+
+            // Retrieve the token from the database
+            var userToken = await _context.UserTokens
+                .FirstOrDefaultAsync(ut => ut.Token == context.User.Identity.Name && ut.EmployeeId == employeeId);
+
+            if (userToken == null)
+            {
+                return; // Token not found
+            }
+
+            // Check if the token has expired
+            if (userToken.Expiration <= DateTime.UtcNow)
+            {
+                // Remove the expired token
+                _context.UserTokens.Remove(userToken);
+                await _context.SaveChangesAsync();
+                return;
             }
 
             // Check if the user has the required permission
@@ -35,8 +55,6 @@ namespace Nexus_webapi.Authorization
             {
                 context.Succeed(requirement);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

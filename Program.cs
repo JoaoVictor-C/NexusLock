@@ -28,7 +28,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     ConfigureSwagger(services);
     ConfigureCors(services);
     ConfigureAuthorization(services);
-    ConfigureHealthChecks(services);
 
     services.AddControllers();
     services.AddEndpointsApiExplorer();
